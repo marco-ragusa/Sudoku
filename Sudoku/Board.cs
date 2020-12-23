@@ -1,8 +1,26 @@
 using System;
 using System.IO;
+using System.Linq;
 
 namespace Sudoku
 {
+    public class CustomArray<T>
+    {
+        public T[] GetColumn(T[,] matrix, int columnNumber)
+        {
+            return Enumerable.Range(0, matrix.GetLength(0))
+                .Select(x => matrix[x, columnNumber])
+                .ToArray();
+        }
+
+        public T[] GetRow(T[,] matrix, int rowNumber)
+        {
+            return Enumerable.Range(0, matrix.GetLength(1))
+                .Select(x => matrix[rowNumber, x])
+                .ToArray();
+        }
+    }
+    
     public class Board
     {
         private int[,] board = new int[9,9];
@@ -64,6 +82,35 @@ namespace Sudoku
                 Console.Write($"|{Environment.NewLine}");
             }
             Console.WriteLine("-------------------------------");
+        }
+
+        public bool CheckCompleted()
+        {
+            var result = true;
+            
+            var sumRow = 0;
+            foreach (var cell in new CustomArray<int>().GetRow(board, i))
+            {
+                sumRow += cell;
+            }
+            if (sumRow != 45)
+            {
+                // Console.WriteLine($"row {i} not completed");
+                result = false;
+            }
+                    
+            var sumCol = 0;
+            foreach (var cell in new CustomArray<int>().GetColumn(board, i))
+            {
+                sumCol += cell;
+            }
+            if (sumCol != 45)
+            {
+                // Console.WriteLine($"col {i} not completed");
+                result = false;
+            }
+
+            return result;
         }
     }
 }

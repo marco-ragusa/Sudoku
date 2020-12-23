@@ -11,6 +11,7 @@ namespace Sudoku
             Board sudokuBoard = new Board(filePath);
             // Board sudokuBoard = new Board("/home/marco/sudoku.txt");
             sudokuBoard.PrintBoard();
+            sudokuBoard.CheckCompleted();
         }
     }
 }
