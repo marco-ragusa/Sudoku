@@ -9,9 +9,12 @@ namespace Sudoku
             Console.Write("Insert the csv sudoku file path: ");
             var filePath = Console.ReadLine();
             Board sudokuBoard = new Board(filePath);
-            // Board sudokuBoard = new Board("/home/marco/sudoku.txt");
+            // Board sudokuBoard = new Board("/home/marco/RiderProjects/Sudoku/example_sudoku.txt");
             sudokuBoard.PrintBoard();
-            sudokuBoard.CheckCompleted();
+            if (sudokuBoard.CheckCompleted())
+            {
+                Console.WriteLine("sudoku completed");
+            }
         }
     }
 }

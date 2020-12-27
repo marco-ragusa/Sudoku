@@ -1,26 +1,8 @@
 using System;
 using System.IO;
-using System.Linq;
 
 namespace Sudoku
 {
-    public class CustomArray<T>
-    {
-        public T[] GetColumn(T[,] matrix, int columnNumber)
-        {
-            return Enumerable.Range(0, matrix.GetLength(0))
-                .Select(x => matrix[x, columnNumber])
-                .ToArray();
-        }
-
-        public T[] GetRow(T[,] matrix, int rowNumber)
-        {
-            return Enumerable.Range(0, matrix.GetLength(1))
-                .Select(x => matrix[rowNumber, x])
-                .ToArray();
-        }
-    }
-    
     public class Board
     {
         private int[,] board = new int[9,9];
@@ -87,27 +69,53 @@ namespace Sudoku
         public bool CheckCompleted()
         {
             var result = true;
+
+            for (int i = 0; i < 9; i++)
+            {
+                // Check every row
+                var sumRow = 0;
+                foreach (var cell in new CustomArray<int>().GetRow(board, i))
+                {
+                    sumRow += cell;
+                }
+                if (sumRow != 45)
+                {
+                    // Console.WriteLine($"row {i} not completed");
+                    result = false;
+                }
+                
+                // Check every col
+                var sumCol = 0;
+                foreach (var cell in new CustomArray<int>().GetColumn(board, i))
+                {
+                    sumCol += cell;
+                }
+                if (sumCol != 45)
+                {
+                    // Console.WriteLine($"col {i} not completed");
+                    result = false;
+                }
+            }
             
-            var sumRow = 0;
-            foreach (var cell in new CustomArray<int>().GetRow(board, i))
+            // Check every 3x3 cell
+            for (int i = 0; i < 9; i+=3)
             {
-                sumRow += cell;
-            }
-            if (sumRow != 45)
-            {
-                // Console.WriteLine($"row {i} not completed");
-                result = false;
-            }
-                    
-            var sumCol = 0;
-            foreach (var cell in new CustomArray<int>().GetColumn(board, i))
-            {
-                sumCol += cell;
-            }
-            if (sumCol != 45)
-            {
-                // Console.WriteLine($"col {i} not completed");
-                result = false;
+                for (int j = 0; j < 9; j+=3)
+                {
+                    int sumCell = 0;
+                    for (int k = i; k < i+3; k++)
+                    {
+                        for (int l = j; l < j+3; l++)
+                        {
+                            sumCell += board[k, l];
+                        }
+                    }
+                    if (sumCell != 45)
+                    {
+                        // Console.WriteLine($"cell {i}x{j} not completed");
+                        result = false;
+                    }
+                }
             }
 
             return result;
